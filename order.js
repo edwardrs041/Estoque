@@ -58,6 +58,21 @@ function submitOrder() {
   }
 
   const newOrder = new Order(
+    state.orders.length + 1,
+    productId,
+    quantity,
+    null,
+    state.currentUser
+  );
+  
+  orderManager.add(newOrder);
+  // Agregar el gasto al dashboard
+  addExpenseFromOrder(productId, quantity);
+  
+  showNotification('Pedido enviado com sucesso!', 'success');
+}
+
+  const newOrder = new Order(
     state.orders.length + 1, // ID único
     productId,
     quantity,
