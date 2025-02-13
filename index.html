@@ -4,12 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sistema de Controle de Estoque</title>
-    <!-- Tailwind CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css">
-    <!-- jsPDF -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
-    <!-- CSS próprio -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/3.4.1/tailwind.min.css">
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
     <link rel="stylesheet" href="css/styles.css">
 </head>
 <body class="bg-gray-100">
@@ -20,11 +17,15 @@
             <form onsubmit="handleLogin(event)" class="space-y-4">
                 <div>
                     <label for="username" class="block text-sm font-medium text-gray-700">Usuário</label>
-                    <input type="text" id="username" placeholder="Usuário" required class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2" aria-label="Usuário">
+                    <input type="text" id="username" name="username" autocomplete="username" 
+                           placeholder="Usuário" required 
+                           class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2">
                 </div>
                 <div>
                     <label for="password" class="block text-sm font-medium text-gray-700">Senha</label>
-                    <input type="password" id="password" placeholder="Senha" required class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2" aria-label="Senha">
+                    <input type="password" id="password" name="password" autocomplete="current-password" 
+                           placeholder="Senha" required 
+                           class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2">
                 </div>
                 <button type="submit" class="w-full bg-blue-600 text-white p-2 rounded-md hover:bg-blue-700">
                     Entrar
@@ -40,7 +41,7 @@
                 <h1 class="text-xl font-bold">Controle de Estoque</h1>
                 <div class="user-info flex items-center">
                     <span id="userName" class="mr-4"></span>
-                    <button onclick="logout()" class="bg-blue-700 px-4 py-2 rounded hover:bg-blue-800" aria-label="Logout">
+                    <button onclick="logout()" class="bg-blue-700 px-4 py-2 rounded hover:bg-blue-800">
                         Sair
                     </button>
                 </div>
@@ -52,9 +53,17 @@
             <!-- Panel de Administrador -->
             <div id="adminPanel" class="hidden">
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+                    <!-- Painel de Controle -->
+                    <div class="bg-white p-6 rounded-lg shadow hover:shadow-lg transition-shadow">
+                        <h2 class="text-lg font-semibold mb-4">Painel de Controle</h2>
+                        <button onclick="showDashboard()" class="bg-blue-500 text-white px-4 py-2 rounded w-full hover:bg-blue-600">
+                            Ver Painel
+                        </button>
+                    </div>
+
                     <!-- Productos -->
                     <div class="bg-white p-6 rounded-lg shadow hover:shadow-lg transition-shadow">
-                        <h2 class="text-lg font-semibold mb-4">Productos</h2>
+                        <h2 class="text-lg font-semibold mb-4">Produtos</h2>
                         <button onclick="showProductForm()" class="bg-blue-500 text-white px-4 py-2 rounded w-full hover:bg-blue-600">
                             Cadastrar Produto
                         </button>
@@ -63,7 +72,7 @@
                         </button>
                     </div>
 
-                    <!-- Proveedores -->
+                    <!-- Fornecedores -->
                     <div class="bg-white p-6 rounded-lg shadow hover:shadow-lg transition-shadow">
                         <h2 class="text-lg font-semibold mb-4">Fornecedores</h2>
                         <button onclick="showSupplierForm()" class="bg-blue-500 text-white px-4 py-2 rounded w-full hover:bg-blue-600">
@@ -82,7 +91,7 @@
                         </button>
                     </div>
 
-                    <!-- Reportes -->
+                    <!-- Relatórios -->
                     <div class="bg-white p-6 rounded-lg shadow hover:shadow-lg transition-shadow">
                         <h2 class="text-lg font-semibold mb-4">Relatórios</h2>
                         <button onclick="showReportOptions()" class="bg-blue-500 text-white px-4 py-2 rounded w-full hover:bg-blue-600">
@@ -100,11 +109,11 @@
                 <div class="bg-white p-6 rounded-lg shadow mb-8">
                     <h2 class="text-lg font-semibold mb-4">Fazer Pedido</h2>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <select id="productSelect" class="border p-2 rounded" aria-label="Selecionar Producto">
+                        <select id="productSelect" class="border p-2 rounded">
                             <option value="">Selecione um produto</option>
                         </select>
-                        <input type="number" id="quantity" placeholder="Quantidade" min="1" class="border p-2 rounded" aria-label="Quantidade">
-                        <button onclick="submitOrder()" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600" aria-label="Enviar Pedido">
+                        <input type="number" id="quantity" placeholder="Quantidade" min="1" class="border p-2 rounded">
+                        <button onclick="submitOrder()" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
                             Enviar Pedido
                         </button>
                     </div>
@@ -118,8 +127,8 @@
         </div>
     </div>
 
-    <!-- Modal para Formularios -->
-    <div id="modal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center">
+    <!-- Modal -->
+    <div id="modal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center" role="dialog" aria-modal="true">
         <div class="bg-white p-8 rounded-lg max-w-md w-full">
             <div id="modalContent">
                 <!-- El contenido del modal se cargará dinámicamente -->
@@ -133,6 +142,7 @@
     </div>
 
     <!-- Scripts -->
+    <script src="js/dashboard.js"></script>
     <script src="js/product.js"></script>
     <script src="js/supplier.js"></script>
     <script src="js/order.js"></script>
